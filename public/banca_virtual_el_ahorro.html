@@ -1,0 +1,2538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca Virtual - El Ahorro R.L.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0a2540;
+            --secondary-blue: #1a3a5c;
+            --accent-blue: #2563eb;
+            --financial-green: #10b981;
+            --financial-green-light: #d1fae5;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --red-500: #ef4444;
+            --yellow-500: #f59e0b;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        /* ========== LOGIN SCREEN ========== */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .login-left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .login-logo h1 {
+            color: var(--primary-blue);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .login-logo p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper svg {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--gray-400);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--gray-50);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--red-500);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            padding: 0.25rem;
+        }
+
+        .password-toggle:hover {
+            color: var(--gray-600);
+        }
+
+        .error-message {
+            color: var(--red-500);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .forgot-password a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .login-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-illustration {
+            max-width: 500px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* ========== MAIN APP LAYOUT ========== */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--primary-blue);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-blue);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
+            border-left-color: var(--financial-green);
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-item span {
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: auto;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            border-radius: 0.75rem;
+            color: #fca5a5;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .topbar-search {
+            position: relative;
+        }
+
+        .topbar-search input {
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 0.5rem;
+            width: 300px;
+            font-size: 0.875rem;
+        }
+
+        .topbar-search svg {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--gray-400);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .topbar-date {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--gray-600);
+        }
+
+        .notification-btn:hover {
+            color: var(--primary-blue);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--red-500);
+            color: var(--white);
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--financial-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .user-info h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .user-info p {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .page-header p {
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .stat-card.blue::before { background: var(--accent-blue); }
+        .stat-card.green::before { background: var(--financial-green); }
+        .stat-card.yellow::before { background: var(--yellow-500); }
+        .stat-card.red::before { background: var(--red-500); }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.blue { background: rgba(37, 99, 235, 0.1); color: var(--accent-blue); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--financial-green); }
+        .stat-icon.yellow { background: rgba(245, 158, 11, 0.1); color: var(--yellow-500); }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.1); color: var(--red-500); }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .stat-card .change {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-card .change.positive { color: var(--financial-green); }
+        .stat-card .change.negative { color: var(--red-500); }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Charts */
+        .chart-container {
+            height: 250px;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            padding: 1rem 0;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--accent-blue), rgba(37, 99, 235, 0.5));
+            border-radius: 0.5rem 0.5rem 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chart-bar:hover {
+            background: linear-gradient(to top, var(--financial-green), rgba(16, 185, 129, 0.5));
+        }
+
+        .chart-bar::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Pie Chart */
+        .pie-chart {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent-blue) 0deg 144deg,
+                var(--financial-green) 144deg 252deg,
+                var(--yellow-500) 252deg 324deg,
+                var(--gray-300) 324deg 360deg
+            );
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .pie-chart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: var(--white);
+            border-radius: 50%;
+        }
+
+        .pie-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .pie-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .pie-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-blue);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .action-btn svg {
+            width: 32px;
+            height: 32px;
+            color: var(--accent-blue);
+        }
+
+        .action-btn span {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Transactions Table */
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .transactions-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--gray-50);
+        }
+
+        .transactions-table td {
+            font-size: 0.875rem;
+        }
+
+        .transactions-table tr:hover {
+            background: var(--gray-50);
+        }
+
+        .transaction-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .transaction-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transaction-icon.deposit { background: rgba(16, 185, 129, 0.1); color: var(--financial-green); }
+        .transaction-icon.withdrawal { background: rgba(239, 68, 68, 0.1); color: var(--red-500); }
+        .transaction-icon.payment { background: rgba(37, 99, 235, 0.1); color: var(--accent-blue); }
+        .transaction-icon.transfer { background: rgba(245, 158, 11, 0.1); color: var(--yellow-500); }
+
+        .amount.positive { color: var(--financial-green); font-weight: 600; }
+        .amount.negative { color: var(--red-500); font-weight: 600; }
+
+        .status-badge {
+            display: inline-flex;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge.completed { background: var(--financial-green-light); color: var(--financial-green); }
+        .status-badge.pending { background: rgba(245, 158, 11, 0.1); color: var(--yellow-500); }
+        .status-badge.failed { background: rgba(239, 68, 68, 0.1); color: var(--red-500); }
+
+        /* Section visibility */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ========== ACCOUNTS PAGE ========== */
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .account-card {
+            background: var(--white);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .account-card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+        }
+
+        .account-card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .account-number {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .account-card-body {
+            padding: 1.5rem;
+        }
+
+        .account-balance {
+            margin-bottom: 1.5rem;
+        }
+
+        .account-balance label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .account-balance .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .account-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .account-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .account-detail label {
+            color: var(--gray-500);
+        }
+
+        .account-detail span {
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .plazo-fijo-card .account-card-header {
+            background: linear-gradient(135deg, var(--financial-green), #059669);
+        }
+
+        /* ========== LOANS PAGE ========== */
+        .loan-form-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .form-grid .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            background: var(--gray-50);
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--white);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            background: var(--gray-50);
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--white);
+        }
+
+        .loan-simulator {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .loan-simulator h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .simulator-result {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .simulator-result label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .simulator-result .monthly-payment {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .simulator-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .simulator-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .simulator-detail label {
+            opacity: 0.8;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gray-200);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .progress-step.active .step-number {
+            background: var(--accent-blue);
+            color: var(--white);
+        }
+
+        .progress-step.completed .step-number {
+            background: var(--financial-green);
+            color: var(--white);
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .progress-step.active .step-label,
+        .progress-step.completed .step-label {
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        /* ========== MOVEMENTS PAGE ========== */
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: var(--white);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid;
+        }
+
+        .btn-export.pdf {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--red-500);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-export.pdf:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-export.excel {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--financial-green);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-export.excel:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: var(--gray-100);
+        }
+
+        .pagination button.active {
+            background: var(--accent-blue);
+            color: var(--white);
+            border-color: var(--accent-blue);
+        }
+
+        /* ========== PROFILE PAGE ========== */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+        }
+
+        .profile-sidebar {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--financial-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        .profile-sidebar h2 {
+            font-size: 1.25rem;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-sidebar p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .profile-actions button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--accent-blue);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-blue);
+        }
+
+        .btn-password {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-password:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-security {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-security:hover {
+            background: var(--gray-100);
+        }
+
+        .profile-details {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-details h3 {
+            font-size: 1.125rem;
+            color: var(--gray-800);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .profile-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .profile-info-item label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .profile-info-item span {
+            font-size: 1rem;
+            color: var(--gray-800);
+            font-weight: 500;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loan-form-container {
+                grid-template-columns: 1fr;
+            }
+
+            .loan-simulator {
+                position: static;
+            }
+
+            .accounts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .topbar-search {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .export-buttons {
+                margin-left: 0;
+            }
+
+            .profile-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-right {
+                display: none;
+            }
+        }
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== LOGIN SCREEN ========== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-left">
+            <div class="login-card">
+                <div class="login-logo">
+                    <svg viewBox="0 0 80 80" fill="none">
+                        <circle cx="40" cy="40" r="38" fill="#0a2540"/>
+                        <path d="M25 50V30h6l9 12 9-12h6v20h-6V38l-9 12-9-12v12h-6z" fill="#10b981"/>
+                        <circle cx="40" cy="25" r="5" fill="#10b981"/>
+                    </svg>
+                    <h1>El Ahorro R.L.</h1>
+                    <p>Cooperativa de Ahorro y Crédito</p>
+                </div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <div class="input-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input type="text" id="username" class="form-input" placeholder="Ingrese su usuario" required>
+                        </div>
+                        <span class="error-message" id="usernameError">Por favor ingrese su usuario</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="input-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="password" class="form-input" placeholder="Ingrese su contraseña" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="error-message" id="passwordError">Por favor ingrese su contraseña</span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        Ingresar
+                    </button>
+                </form>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="alert('Función de recuperación de contraseña')">¿Olvidó su contraseña?</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <svg class="login-illustration" viewBox="0 0 500 400" fill="none">
+                <!-- Bank Building -->
+                <rect x="150" y="150" width="200" height="200" fill="#1a3a5c" rx="8"/>
+                <rect x="170" y="180" width="160" height="150" fill="#0a2540"/>
+                <!-- Columns -->
+                <rect x="185" y="200" width="20" height="120" fill="#ffffff" opacity="0.2"/>
+                <rect x="225" y="200" width="20" height="120" fill="#ffffff" opacity="0.2"/>
+                <rect x="265" y="200" width="20" height="120" fill="#ffffff" opacity="0.2"/>
+                <rect x="305" y="200" width="20" height="120" fill="#ffffff" opacity="0.2"/>
+                <!-- Roof -->
+                <polygon points="250,100 380,150 120,150" fill="#10b981"/>
+                <!-- Door -->
+                <rect x="225" y="270" width="50" height="60" fill="#10b981" rx="4"/>
+                <!-- Windows -->
+                <rect x="180" y="220" width="30" height="30" fill="#10b981" opacity="0.5" rx="4"/>
+                <rect x="290" y="220" width="30" height="30" fill="#10b981" opacity="0.5" rx="4"/>
+                <!-- Coins floating -->
+                <circle cx="100" cy="200" r="20" fill="#10b981" opacity="0.8"/>
+                <text x="100" y="205" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="14">$</text>
+                <circle cx="400" cy="180" r="25" fill="#10b981" opacity="0.8"/>
+                <text x="400" y="187" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="18">$</text>
+                <circle cx="80" cy="280" r="15" fill="#10b981" opacity="0.6"/>
+                <text x="80" y="284" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="10">$</text>
+                <circle cx="420" cy="260" r="18" fill="#10b981" opacity="0.7"/>
+                <text x="420" y="265" text-anchor="middle" fill="#ffffff" font-weight="bold" font-size="12">$</text>
+                <!-- Shield -->
+                <path d="M250 60 L280 70 L280 95 C280 110 265 120 250 125 C235 120 220 110 220 95 L220 70 Z" fill="#10b981"/>
+                <path d="M240 85 L248 93 L265 76" stroke="#ffffff" stroke-width="3" fill="none"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- ========== MAIN APP ========== -->
+    <div class="app-container" id="appContainer">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" fill="#0a2540"/>
+                        <path d="M10 20V12h2.4l3.6 4.8 3.6-4.8H22v8h-2.4v-4.8l-3.6 4.8-3.6-4.8V20H10z" fill="#10b981"/>
+                        <circle cx="16" cy="10" r="2" fill="#10b981"/>
+                    </svg>
+                </div>
+                <div class="sidebar-brand">
+                    <h2>El Ahorro R.L.</h2>
+                    <p>Banca Virtual</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a class="nav-item active" data-section="dashboard" onclick="showSection('dashboard')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" data-section="accounts" onclick="showSection('accounts')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                    </svg>
+                    <span>Cuentas de Ahorro</span>
+                </a>
+                <a class="nav-item" data-section="loans" onclick="showSection('loans')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <span>Préstamos</span>
+                </a>
+                <a class="nav-item" data-section="movements" onclick="showSection('movements')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    <span>Movimientos</span>
+                </a>
+                <a class="nav-item" data-section="profile" onclick="showSection('profile')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span>Perfil</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="topbar-search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" placeholder="Buscar...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-date" id="currentDate"></span>
+                    <button class="notification-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar">MG</div>
+                        <div class="user-info">
+                            <h4>María García</h4>
+                            <p>Asociado Premium</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- ========== DASHBOARD SECTION ========== -->
+                <section class="section active" id="dashboard">
+                    <div class="page-header">
+                        <h1>Dashboard</h1>
+                        <p>Bienvenido de nuevo, María. Aquí está el resumen de tu cuenta.</p>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                </svg>
+                            </div>
+                            <h3>Saldo Disponible</h3>
+                            <div class="value">Q 45,230.50</div>
+                            <div class="change positive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                </svg>
+                                +12.5% este mes
+                            </div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"/>
+                                </svg>
+                            </div>
+                            <h3>Ahorros Corrientes</h3>
+                            <div class="value">Q 32,450.00</div>
+                            <div class="change positive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                </svg>
+                                +8.3% este mes
+                            </div>
+                        </div>
+                        <div class="stat-card yellow">
+                            <div class="stat-icon yellow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <h3>Ahorro a Plazo Fijo</h3>
+                            <div class="value">Q 12,780.50</div>
+                            <div class="change positive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                </svg>
+                                5.2% interés anual
+                            </div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-icon red">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                            </div>
+                            <h3>Préstamos Activos</h3>
+                            <div class="value">Q 25,000.00</div>
+                            <div class="change negative">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                                </svg>
+                                Q 1,250/mes
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            <span>Depositar</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            <span>Retirar</span>
+                        </button>
+                        <button class="action-btn" onclick="showSection('loans')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span>Solicitar Préstamo</span>
+                        </button>
+                        <button class="action-btn" onclick="showSection('movements')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                            <span>Ver Historial</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Charts Row -->
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Evolución del Saldo Mensual</h3>
+                            </div>
+                            <div class="chart-container">
+                                <div class="chart-bar" style="height: 60%;" data-label="Ene"></div>
+                                <div class="chart-bar" style="height: 75%;" data-label="Feb"></div>
+                                <div class="chart-bar" style="height: 65%;" data-label="Mar"></div>
+                                <div class="chart-bar" style="height: 80%;" data-label="Abr"></div>
+                                <div class="chart-bar" style="height: 70%;" data-label="May"></div>
+                                <div class="chart-bar" style="height: 90%;" data-label="Jun"></div>
+                                <div class="chart-bar" style="height: 85%;" data-label="Jul"></div>
+                                <div class="chart-bar" style="height: 95%;" data-label="Ago"></div>
+                                <div class="chart-bar" style="height: 88%;" data-label="Sep"></div>
+                                <div class="chart-bar" style="height: 92%;" data-label="Oct"></div>
+                                <div class="chart-bar" style="height: 98%;" data-label="Nov"></div>
+                                <div class="chart-bar" style="height: 100%;" data-label="Dic"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Distribución de Productos</h3>
+                            </div>
+                            <div class="pie-chart"></div>
+                            <div class="pie-legend">
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: var(--accent-blue);"></div>
+                                    <span>Ahorro Corriente (40%)</span>
+                                </div>
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: var(--financial-green);"></div>
+                                    <span>Plazo Fijo (30%)</span>
+                                </div>
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: var(--yellow-500);"></div>
+                                    <span>Préstamos (20%)</span>
+                                </div>
+                                <div class="pie-legend-item">
+                                    <div class="pie-legend-color" style="background: var(--gray-300);"></div>
+                                    <span>Otros (10%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Transactions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Últimos Movimientos</h3>
+                            <a href="#" onclick="showSection('movements')" style="color: var(--accent-blue); text-decoration: none; font-size: 0.875rem;">Ver todos</a>
+                        </div>
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Fecha</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon deposit">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <line x1="12" y1="19" x2="12" y2="5"/>
+                                                    <polyline points="5 12 12 5 19 12"/>
+                                                </svg>
+                                            </div>
+                                            Depósito
+                                        </div>
+                                    </td>
+                                    <td>Depósito en ventanilla</td>
+                                    <td>15/01/2024</td>
+                                    <td><span class="amount positive">+Q 5,000.00</span></td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon payment">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                                </svg>
+                                            </div>
+                                            Pago
+                                        </div>
+                                    </td>
+                                    <td>Pago cuota préstamo</td>
+                                    <td>14/01/2024</td>
+                                    <td><span class="amount negative">-Q 1,250.00</span></td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon transfer">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <polyline points="17 1 21 5 17 9"/>
+                                                    <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                                                    <polyline points="7 23 3 19 7 15"/>
+                                                    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                                                </svg>
+                                            </div>
+                                            Transferencia
+                                        </div>
+                                    </td>
+                                    <td>Transferencia a terceros</td>
+                                    <td>12/01/2024</td>
+                                    <td><span class="amount negative">-Q 800.00</span></td>
+                                    <td><span class="status-badge pending">Pendiente</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon withdrawal">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                                    <polyline points="19 12 12 19 5 12"/>
+                                                </svg>
+                                            </div>
+                                            Retiro
+                                        </div>
+                                    </td>
+                                    <td>Retiro en cajero</td>
+                                    <td>10/01/2024</td>
+                                    <td><span class="amount negative">-Q 500.00</span></td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <!-- ========== ACCOUNTS SECTION ========== -->
+                <section class="section" id="accounts">
+                    <div class="page-header">
+                        <h1>Cuentas de Ahorro</h1>
+                        <p>Gestiona tus cuentas de ahorro corriente y a plazo fijo.</p>
+                    </div>
+                    
+                    <div class="accounts-grid">
+                        <div class="account-card">
+                            <div class="account-card-header">
+                                <h3>Cuenta de Ahorro Corriente</h3>
+                                <div class="account-number">**** **** **** 4532</div>
+                            </div>
+                            <div class="account-card-body">
+                                <div class="account-balance">
+                                    <label>Saldo Actual</label>
+                                    <div class="amount">Q 32,450.00</div>
+                                </div>
+                                <div class="account-details">
+                                    <div class="account-detail">
+                                        <label>Número de Cuenta</label>
+                                        <span>001-0045327</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Fecha de Apertura</label>
+                                        <span>15 de Marzo, 2019</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Tipo de Cuenta</label>
+                                        <span>Ahorro Corriente</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Tasa de Interés</label>
+                                        <span>2.5% anual</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="account-card plazo-fijo-card">
+                            <div class="account-card-header">
+                                <h3>Cuenta Ahorro a Plazo Fijo</h3>
+                                <div class="account-number">**** **** **** 7891</div>
+                            </div>
+                            <div class="account-card-body">
+                                <div class="account-balance">
+                                    <label>Monto Invertido</label>
+                                    <div class="amount">Q 12,780.50</div>
+                                </div>
+                                <div class="account-details">
+                                    <div class="account-detail">
+                                        <label>Número de Cuenta</label>
+                                        <span>002-0078912</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Tasa de Interés</label>
+                                        <span>5.2% anual</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Fecha de Apertura</label>
+                                        <span>01 de Junio, 2023</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Fecha de Vencimiento</label>
+                                        <span>01 de Junio, 2025</span>
+                                    </div>
+                                    <div class="account-detail">
+                                        <label>Intereses Generados</label>
+                                        <span style="color: var(--financial-green);">Q 664.59</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">
+                            <h3 class="card-title">Resumen de Productos Financieros</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding-top: 1rem;">
+                            <div style="text-align: center; padding: 1.5rem; background: var(--gray-50); border-radius: 0.75rem;">
+                                <div style="font-size: 0.875rem; color: var(--gray-500); margin-bottom: 0.5rem;">Total en Ahorros</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-blue);">Q 45,230.50</div>
+                            </div>
+                            <div style="text-align: center; padding: 1.5rem; background: var(--gray-50); border-radius: 0.75rem;">
+                                <div style="font-size: 0.875rem; color: var(--gray-500); margin-bottom: 0.5rem;">Intereses del Año</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--financial-green);">Q 1,475.82</div>
+                            </div>
+                            <div style="text-align: center; padding: 1.5rem; background: var(--gray-50); border-radius: 0.75rem;">
+                                <div style="font-size: 0.875rem; color: var(--gray-500); margin-bottom: 0.5rem;">Cuentas Activas</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--gray-800);">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ========== LOANS SECTION ========== -->
+                <section class="section" id="loans">
+                    <div class="page-header">
+                        <h1>Solicitud de Préstamos</h1>
+                        <p>Complete el formulario para solicitar un nuevo préstamo.</p>
+                    </div>
+                    
+                    <!-- Progress Steps -->
+                    <div class="progress-steps">
+                        <div class="progress-step completed">
+                            <div class="step-number">1</div>
+                            <span class="step-label">Datos Personales</span>
+                        </div>
+                        <div class="progress-step active">
+                            <div class="step-number">2</div>
+                            <span class="step-label">Información del Préstamo</span>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-number">3</div>
+                            <span class="step-label">Documentación</span>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-number">4</div>
+                            <span class="step-label">Confirmación</span>
+                        </div>
+                    </div>
+                    
+                    <div class="loan-form-container">
+                        <div class="card">
+                            <h3 class="card-title" style="margin-bottom: 1.5rem;">Formulario de Solicitud</h3>
+                            <form class="form-grid" id="loanForm" onsubmit="submitLoan(event)">
+                                <div class="form-group">
+                                    <label>Nombre Completo</label>
+                                    <input type="text" class="form-input" style="padding-left: 1rem;" value="María García López" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>DPI</label>
+                                    <input type="text" class="form-input" style="padding-left: 1rem;" placeholder="0000 00000 0000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Correo Electrónico</label>
+                                    <input type="email" class="form-input" style="padding-left: 1rem;" value="maria.garcia@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Teléfono</label>
+                                    <input type="tel" class="form-input" style="padding-left: 1rem;" placeholder="0000-0000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo de Préstamo</label>
+                                    <select class="form-select" id="loanType" onchange="updateSimulator()">
+                                        <option value="">Seleccione tipo</option>
+                                        <option value="fiduciario">Préstamo Fiduciario</option>
+                                        <option value="hipotecario">Préstamo Hipotecario</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Monto Solicitado (Q)</label>
+                                    <input type="number" class="form-input" style="padding-left: 1rem;" id="loanAmount" placeholder="10,000" oninput="updateSimulator()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Plazo (meses)</label>
+                                    <select class="form-select" id="loanTerm" onchange="updateSimulator()">
+                                        <option value="">Seleccione plazo</option>
+                                        <option value="12">12 meses</option>
+                                        <option value="24">24 meses</option>
+                                        <option value="36">36 meses</option>
+                                        <option value="48">48 meses</option>
+                                        <option value="60">60 meses</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ingresos Mensuales (Q)</label>
+                                    <input type="number" class="form-input" style="padding-left: 1rem;" placeholder="5,000" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Dirección</label>
+                                    <input type="text" class="form-input" style="padding-left: 1rem;" placeholder="Ingrese su dirección completa" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Comentarios Adicionales</label>
+                                    <textarea class="form-textarea" placeholder="Información adicional que desee proporcionar..."></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <button type="submit" class="btn btn-primary" style="width: auto;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                            <polyline points="22 4 12 14.01 9 11.01"/>
+                                        </svg>
+                                        Enviar Solicitud
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div>
+                            <div class="loan-simulator">
+                                <h3>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                        <line x1="8" y1="21" x2="16" y2="21"/>
+                                        <line x1="12" y1="17" x2="12" y2="21"/>
+                                    </svg>
+                                    Simulador de Cuota
+                                </h3>
+                                <div class="simulator-result">
+                                    <label>Cuota Mensual Estimada</label>
+                                    <div class="monthly-payment" id="monthlyPayment">Q 0.00</div>
+                                </div>
+                                <div class="simulator-details">
+                                    <div class="simulator-detail">
+                                        <label>Monto del Préstamo</label>
+                                        <span id="simAmount">Q 0.00</span>
+                                    </div>
+                                    <div class="simulator-detail">
+                                        <label>Tasa de Interés</label>
+                                        <span id="simRate">0%</span>
+                                    </div>
+                                    <div class="simulator-detail">
+                                        <label>Plazo</label>
+                                        <span id="simTerm">0 meses</span>
+                                    </div>
+                                    <div class="simulator-detail">
+                                        <label>Total a Pagar</label>
+                                        <span id="simTotal">Q 0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card" style="margin-top: 1rem;">
+                                <h3 class="card-title" style="margin-bottom: 1rem;">Estado de Solicitudes</h3>
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                        <span style="font-size: 0.875rem;">SOL-2024-001</span>
+                                        <span class="status-badge pending">En Revisión</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--gray-50); border-radius: 0.5rem;">
+                                        <span style="font-size: 0.875rem;">SOL-2023-089</span>
+                                        <span class="status-badge completed">Aprobado</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ========== MOVEMENTS SECTION ========== -->
+                <section class="section" id="movements">
+                    <div class="page-header">
+                        <h1>Historial de Movimientos</h1>
+                        <p>Consulta todos tus movimientos financieros.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="filters-bar">
+                            <div class="filter-group">
+                                <label>Desde:</label>
+                                <input type="date" class="filter-input">
+                            </div>
+                            <div class="filter-group">
+                                <label>Hasta:</label>
+                                <input type="date" class="filter-input">
+                            </div>
+                            <div class="filter-group">
+                                <label>Tipo:</label>
+                                <select class="filter-select">
+                                    <option value="">Todos</option>
+                                    <option value="deposito">Depósitos</option>
+                                    <option value="retiro">Retiros</option>
+                                    <option value="pago">Pagos</option>
+                                    <option value="transferencia">Transferencias</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <input type="text" class="filter-input" placeholder="Buscar..." style="width: 200px;">
+                            </div>
+                            <div class="export-buttons">
+                                <button class="btn-export pdf">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                    Exportar PDF
+                                </button>
+                                <button class="btn-export excel">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                    Exportar Excel
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Monto</th>
+                                    <th>Saldo</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon deposit">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <line x1="12" y1="19" x2="12" y2="5"/>
+                                                    <polyline points="5 12 12 5 19 12"/>
+                                                </svg>
+                                            </div>
+                                            Depósito
+                                        </div>
+                                    </td>
+                                    <td>Depósito en ventanilla - Agencia Central</td>
+                                    <td><span class="amount positive">+Q 5,000.00</span></td>
+                                    <td>Q 45,230.50</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>14/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon payment">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                                </svg>
+                                            </div>
+                                            Pago
+                                        </div>
+                                    </td>
+                                    <td>Pago cuota préstamo #PRE-2023-045</td>
+                                    <td><span class="amount negative">-Q 1,250.00</span></td>
+                                    <td>Q 40,230.50</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>12/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon transfer">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <polyline points="17 1 21 5 17 9"/>
+                                                    <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                                                    <polyline points="7 23 3 19 7 15"/>
+                                                    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                                                </svg>
+                                            </div>
+                                            Transferencia
+                                        </div>
+                                    </td>
+                                    <td>Transferencia a Juan Pérez - Cuenta ***4521</td>
+                                    <td><span class="amount negative">-Q 800.00</span></td>
+                                    <td>Q 41,480.50</td>
+                                    <td><span class="status-badge pending">Pendiente</span></td>
+                                </tr>
+                                <tr>
+                                    <td>10/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon withdrawal">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                                    <polyline points="19 12 12 19 5 12"/>
+                                                </svg>
+                                            </div>
+                                            Retiro
+                                        </div>
+                                    </td>
+                                    <td>Retiro en cajero ATM - Plaza Central</td>
+                                    <td><span class="amount negative">-Q 500.00</span></td>
+                                    <td>Q 42,280.50</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>08/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon deposit">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <line x1="12" y1="19" x2="12" y2="5"/>
+                                                    <polyline points="5 12 12 5 19 12"/>
+                                                </svg>
+                                            </div>
+                                            Depósito
+                                        </div>
+                                    </td>
+                                    <td>Abono intereses cuenta plazo fijo</td>
+                                    <td><span class="amount positive">+Q 55.38</span></td>
+                                    <td>Q 42,780.50</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>05/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon transfer">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <polyline points="17 1 21 5 17 9"/>
+                                                    <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                                                    <polyline points="7 23 3 19 7 15"/>
+                                                    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                                                </svg>
+                                            </div>
+                                            Transferencia
+                                        </div>
+                                    </td>
+                                    <td>Transferencia recibida - Ana López</td>
+                                    <td><span class="amount positive">+Q 2,500.00</span></td>
+                                    <td>Q 42,725.12</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                                <tr>
+                                    <td>02/01/2024</td>
+                                    <td>
+                                        <div class="transaction-type">
+                                            <div class="transaction-icon payment">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                                </svg>
+                                            </div>
+                                            Pago
+                                        </div>
+                                    </td>
+                                    <td>Pago de servicios - Energía eléctrica</td>
+                                    <td><span class="amount negative">-Q 350.00</span></td>
+                                    <td>Q 40,225.12</td>
+                                    <td><span class="status-badge completed">Completado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="pagination">
+                            <button>&laquo;</button>
+                            <button class="active">1</button>
+                            <button>2</button>
+                            <button>3</button>
+                            <button>4</button>
+                            <button>5</button>
+                            <button>&raquo;</button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- ========== PROFILE SECTION ========== -->
+                <section class="section" id="profile">
+                    <div class="page-header">
+                        <h1>Mi Perfil</h1>
+                        <p>Gestiona tu información personal y configuración de cuenta.</p>
+                    </div>
+                    
+                    <div class="profile-container">
+                        <div class="profile-sidebar">
+                            <div class="profile-avatar">MG</div>
+                            <h2>María García López</h2>
+                            <p>Asociado desde 2019</p>
+                            <p style="color: var(--financial-green); font-weight: 500; margin-top: 0.5rem;">Asociado Premium</p>
+                            
+                            <div class="profile-actions">
+                                <button class="btn-edit">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                    Editar Perfil
+                                </button>
+                                <button class="btn-password">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                    Cambiar Contraseña
+                                </button>
+                                <button class="btn-security">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                    Configuración de Seguridad
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <h3>Información Personal</h3>
+                            <div class="profile-info-grid">
+                                <div class="profile-info-item">
+                                    <label>Nombre Completo</label>
+                                    <span>María García López</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>DPI</label>
+                                    <span>2589 45632 0101</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Correo Electrónico</label>
+                                    <span>maria.garcia@email.com</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Teléfono</label>
+                                    <span>+502 5555-1234</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Dirección</label>
+                                    <span>4ta Avenida 12-45, Zona 10, Ciudad de Guatemala</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Fecha de Nacimiento</label>
+                                    <span>15 de Mayo, 1990</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Número de Asociado</label>
+                                    <span>ASC-2019-00452</span>
+                                </div>
+                                <div class="profile-info-item">
+                                    <label>Estado de Cuenta</label>
+                                    <span style="color: var(--financial-green);">Activo</span>
+                                </div>
+                            </div>
+                            
+                            <h3 style="margin-top: 2rem;">Configuración de Notificaciones</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--accent-blue);">
+                                    <span>Notificaciones por correo electrónico</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--accent-blue);">
+                                    <span>Notificaciones SMS</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                    <input type="checkbox" style="width: 18px; height: 18px; accent-color: var(--accent-blue);">
+                                    <span>Alertas de movimientos</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--accent-blue);">
+                                    <span>Recordatorios de pago</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Set current date
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = today.toLocaleDateString('es-GT', options);
+            }
+        }
+        updateDate();
+        
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        }
+        
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            
+            let isValid = true;
+            
+            if (!username) {
+                usernameError.classList.add('show');
+                document.getElementById('username').classList.add('error');
+                isValid = false;
+            } else {
+                usernameError.classList.remove('show');
+                document.getElementById('username').classList.remove('error');
+            }
+            
+            if (!password) {
+                passwordError.classList.add('show');
+                document.getElementById('password').classList.add('error');
+                isValid = false;
+            } else {
+                passwordError.classList.remove('show');
+                document.getElementById('password').classList.remove('error');
+            }
+            
+            if (isValid) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appContainer').classList.add('active');
+            }
+        }
+        
+        // Logout
+        function logout() {
+            document.getElementById('appContainer').classList.remove('active');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        
+        // Show section (SPA navigation)
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+        
+        // Toggle sidebar (mobile)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+        
+        // Loan simulator
+        function updateSimulator() {
+            const loanType = document.getElementById('loanType').value;
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const term = parseInt(document.getElementById('loanTerm').value) || 0;
+            
+            let rate = 0;
+            if (loanType === 'fiduciario') {
+                rate = 0.12; // 12% annual
+            } else if (loanType === 'hipotecario') {
+                rate = 0.08; // 8% annual
+            }
+            
+            const monthlyRate = rate / 12;
+            let monthlyPayment = 0;
+            let totalPayment = 0;
+            
+            if (amount > 0 && term > 0 && rate > 0) {
+                monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+                totalPayment = monthlyPayment * term;
+            }
+            
+            document.getElementById('monthlyPayment').textContent = 'Q ' + monthlyPayment.toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('simAmount').textContent = 'Q ' + amount.toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('simRate').textContent = (rate * 100) + '%';
+            document.getElementById('simTerm').textContent = term + ' meses';
+            document.getElementById('simTotal').textContent = 'Q ' + totalPayment.toLocaleString('es-GT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        
+        // Submit loan form
+        function submitLoan(event) {
+            event.preventDefault();
+            alert('¡Solicitud enviada exitosamente! Se le notificará el estado de su solicitud por correo electrónico.');
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('active');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
